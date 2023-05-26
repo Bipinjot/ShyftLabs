@@ -16,10 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .shyftuser import views
+from .shyftuser import views as userview
+from .shyftcourse import views as courseview
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/', views.getUser),
-    path('alluser/', views.getAllUser),
+    path('user/', userview.getUser),
+    path('alluser/', userview.getAllUser),
+    path('deleteuser/', userview.deleteUser),
+    path('course/', courseview.course),
+    path('allcourse/', courseview.allcourse),
+    path('deletecourse/', courseview.deleteCourse),
 ]

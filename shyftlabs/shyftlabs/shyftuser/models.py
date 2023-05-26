@@ -17,7 +17,7 @@ class ShyftUser(models.Model):
     shyft_userCreatedOn = models.DateTimeField(auto_now_add=True)
     shyft_photoUrl = models.CharField(max_length=500, default="NA")
     shyft_dob = models.DateTimeField(blank=True, null=True)
-    shyft_isdeleted = models.BooleanField(default=False)
+    isdeleted = models.BooleanField(default=False)
     shyft_usertype = models.CharField(max_length=10, default="Student")
     is_active = models.BooleanField(default=True)
     password = models.CharField(blank=True, max_length=100, null=True)
