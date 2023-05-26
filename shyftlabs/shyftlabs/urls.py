@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from .shyftuser import views as userview
 from .shyftcourse import views as courseview
+from .shyftresults import views as resultview
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,4 +28,7 @@ urlpatterns = [
     path('course/', courseview.course),
     path('allcourse/', courseview.allcourse),
     path('deletecourse/', courseview.deleteCourse),
+    path('result/', resultview.result),
+    path('allresult/', resultview.getAllResults),
+    path('deleteresult/', resultview.deleteResult),
 ]

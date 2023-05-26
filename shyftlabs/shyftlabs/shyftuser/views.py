@@ -36,7 +36,7 @@ def getUser(request):
         except:
             return HttpResponse("Bad parameters", status=400)
         return HttpResponse("post request, please.", content_type="text/plain")
-
+@csrf_exempt
 def getAllUser(request):
     if request.method == "GET":
         retrieve = ShyftUser.objects.filter(isdeleted=False)

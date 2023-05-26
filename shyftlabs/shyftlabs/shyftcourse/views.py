@@ -19,7 +19,7 @@ def course(request):
     if request.GET:
         try:
             if request.GET['courseid']:
-                retrieve = ShyftCourse.objects.get(id=request.GET['courseid'])
+                retrieve = ShyftCourse.objects.get(id=request.GET['courseid'], isdeleted=False)
                 result = {}
                 result['courseid'] = retrieve.id
                 result['coursename'] = retrieve.shyft_coursename

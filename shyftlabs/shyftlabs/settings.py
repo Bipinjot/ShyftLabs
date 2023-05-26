@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shyftlabs.shyftuser',
-    'shyftlabs.shyftcourse'
+    'shyftlabs.shyftcourse',
+    'shyftlabs.shyftresults'
 ]
 
 MIDDLEWARE = [
