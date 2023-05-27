@@ -3,19 +3,29 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-
+from django.http import JsonResponse
 from shyftlabs.shyftcourse.models import ShyftCourse
 
 
 # Create your views here.
 @csrf_exempt
 def course(request):
-    if request.method == "POST":
-        if request.POST['coursename']:
-            course = ShyftCourse()
-            course.shyft_coursename = request.POST['coursename']
-            course.save()
-            return HttpResponse("Post request for course save", content_type="text/plain")
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            
+            if 'coursename' in data:
+                course = ShyftCourse()
+                course.shyft_coursename = data['coursename']
+                course.save()
+                return JsonResponse({'message': 'Post request for course save'})
+            
+            return JsonResponse({'error': 'Invalid request'}, status=400)
+        
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+
+            
     if request.method == "GET":
         try:
             if request.GET['courseid']:
@@ -29,15 +39,23 @@ def course(request):
 
 @csrf_exempt
 def deleteCourse(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         try:
-            if request.POST['courseid']:
-                retrieve = ShyftCourse.objects.get(id=request.POST.get('courseid'))
-                retrieve.isdeleted = True
-                retrieve.save()
-        except:
-            return HttpResponse("Course not found", status=500)
-        return HttpResponse("Delete action succeeded", content_type="application/json")
+            data = json.loads(request.body)
+            
+            if 'courseid' in data:
+                try:
+                    retrieve = ShyftCourse.objects.get(id=data['courseid'])
+                    retrieve.isdeleted = True
+                    retrieve.save()
+                    return JsonResponse({'message': 'Delete action succeeded'})
+                except ShyftCourse.DoesNotExist:
+                    return JsonResponse({'error': 'Course not found'}, status=404)
+            
+            return JsonResponse({'error': 'Invalid request'}, status=400)
+        
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
 
 @csrf_exempt
 def allcourse(request):

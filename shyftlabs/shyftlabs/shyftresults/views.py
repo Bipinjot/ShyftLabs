@@ -1,13 +1,9 @@
 import json
-
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-
 from shyftlabs.shyftresults.models import ShyftResults
-
 from shyftlabs.shyftcourse.models import ShyftCourse
-
 from shyftlabs.shyftuser.models import ShyftUser
 
 @csrf_exempt
