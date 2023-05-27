@@ -12,7 +12,7 @@ def getUser(request):
             try:
                 retrieve = ShyftUser.objects.get(id=request.GET['id'], isdeleted=False)
                 result = {}
-                result['name'] = retrieve.shyft_name
+                result['shyft_name'] = retrieve.shyft_name
                 result['shyft_familyname'] = retrieve.shyft_familyname
                 result['shyft_email'] = retrieve.shyft_email
                 result['shyft_dob'] = str(retrieve.shyft_dob)
@@ -22,16 +22,16 @@ def getUser(request):
     if request.method =="POST":
         shyftuser = ShyftUser()
         try:
-            if request.POST['name']:
+            if 'name' in request.POST:
                 shyftuser.shyft_name = request.POST['name']
-            if request.POST['dob']:
-                shyftuser.shyft_dob = datetime.datetime.fromisoformat(request.POST['dob'])
-            if request.POST['email']:
+            if 'dob' in request.POST:
+                shyftuser.shyft_dob = datetime.strptime(request.POST['dob'], "%Y-%m-%d")
+            if 'email' in request.POST:
                 shyftuser.shyft_email = request.POST['email']
-            if request.POST['familyname']:
+            if 'familyname' in request.POST:
                 shyftuser.shyft_familyname = request.POST['familyname']
-            if request.POST['type']:
-                shyftuser.shyft_familyname = request.POST['type']
+            if 'type' in request.POST:
+                shyftuser.shyft_usertype = request.POST['type']
             shyftuser.save()
         except:
             return HttpResponse("Bad parameters", status=400)
