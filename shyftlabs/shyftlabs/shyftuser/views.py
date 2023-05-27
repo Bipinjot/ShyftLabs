@@ -25,7 +25,7 @@ def getUser(request):
             if 'name' in request.POST:
                 shyftuser.shyft_name = request.POST['name']
             if 'dob' in request.POST:
-                shyftuser.shyft_dob = datetime.strptime(request.POST['dob'], "%Y-%m-%d")
+                shyftuser.shyft_dob = datetime.datetime.strptime(request.POST['dob'], "%Y-%m-%d")
             if 'email' in request.POST:
                 shyftuser.shyft_email = request.POST['email']
             if 'familyname' in request.POST:
