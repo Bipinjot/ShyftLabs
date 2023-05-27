@@ -13,7 +13,7 @@ from shyftlabs.shyftuser.models import ShyftUser
 @csrf_exempt
 # Create your views here.
 def result(request):
-    if request.POST:
+    if request.method == "POST":
         try:
             result = ShyftResults()
             if request.POST['userid']:
