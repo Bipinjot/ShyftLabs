@@ -56,7 +56,7 @@ def deleteUser(request):
     if request.method =="POST":
         try:
             if 'userid' in request.POST:
-                retrieve = ShyftUser.objects.get(id=request.POST.get('userid'))
+                retrieve = ShyftUser.objects.get(id=request.POST['userid'])
                 retrieve.isdeleted = True
                 retrieve.save()
         except:
