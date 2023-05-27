@@ -42,7 +42,7 @@ def deleteCourse(request):
 @csrf_exempt
 def allcourse(request):
     if request.method == "GET":
-        retrieve = ShyftCourse.objects.all()
+        retrieve = ShyftCourse.objects.filter(isdeleted=False)
         courses = []
         for retrivedCourses in retrieve:
             singleCourse = {}
