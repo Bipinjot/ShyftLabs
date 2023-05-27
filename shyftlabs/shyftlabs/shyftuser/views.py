@@ -53,7 +53,7 @@ def getAllUser(request):
 
 @csrf_exempt
 def deleteUser(request):
-    if request.method =="POST":
+    if request.method == "POST":
         try:
             if 'userid' in request.POST:
                 retrieve = ShyftUser.objects.get(id=request.POST['userid'])
