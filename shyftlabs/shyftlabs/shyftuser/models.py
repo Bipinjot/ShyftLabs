@@ -7,7 +7,7 @@ class ShyftUser(models.Model):
     '''
     Model: User
     '''
-    REQUIRED_FIELDS = ['shyft_email', 'shyft_name']
+    REQUIRED_FIELDS = ['shyft_email', 'shyft_name', 'shyft_familyname', 'shyft_dob', ]
     USERNAME_FIELD = 'shyft_email'
     shyft_firebaseid = models.CharField(max_length=100)
     shyft_name = models.CharField(max_length=100)
