@@ -1,30 +1,57 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import ReactTable from "react-table";
+import axios from "axios";
 
 function StudentList() {
   const deleteStudent = async (row) => {
     console.log(row)
-    await axios
-      .delete(
-        `https://shyftappbackend--q3xeitu.ambitiousisland-adc17e0d.westus2.azurecontainerapps.io/deleteuser/${row.id}`
-      )
-      .then((res) => {
-        alert("Deleted");
-      })
-      .catch((err) => {
-        console.log("Error in delete");
-      });
-  };
+  //   await axios
+  //   .post(
+  //     "https://shyftappbackend--rev-10.ambitiousisland-adc17e0d.westus2.azurecontainerapps.io/deleteuser/",
+  //     { userid: row.shyft_userid.toString() }
+  //   )
+  //     .then((res) => {
+  //       alert("Deleted");
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error in delete");
+  //     });
+  // };
+  try {
+    const response = await fetch('http://127.0.0.1:8000/deleteuser/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({userid: row.shyft_userid.toString()}) // Replace with your actual data
+    });
+
+    if (response.ok) {
+      // Request was successful
+      const data = await response.json();
+      console.log(data); // Do something with the response data
+      alert("Success");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+    } else {
+      // Request failed
+      console.error('Error:', response.status);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
   let [studentList, setStudentList] = useState([]);
   useEffect(() => {
-    console.log("check");
+    //console.log("check");
     axios
-      .get("https://6471219d3de51400f7255809.mockapi.io/test/students")
+      .get("http://127.0.0.1:8000//alluser/")
       .then((res) => {
         console.log(res.data);
         setStudentList(res.data);
       });
+    
   }, []);
   const columns = [
     {

@@ -2,29 +2,81 @@ import React from "react";
 import { Formik, Field, Form } from "formik";
 import axios from "axios";
 
-function AddStudent() {
+function AddStudent(e) {
+  // e.preventDefault();
   const addStudentHandler = async (values) => {
     let studentDetails = {
-      shyft_name: values.firstName,
-      shyft_familyname: values.familyName,
-      shyft_dob: values.dob,
-      shyft_email: values.email,
+      name: values.firstName,
+      familyname: values.familyName,
+      dob: values.dob,
+      email: values.email,
     };
+
     console.log(studentDetails);
-    await axios
-      .post(
-        "https://shyftappbackend--q3xeitu.ambitiousisland-adc17e0d.westus2.azurecontainerapps.io/user",
-        { studentDetails: studentDetails }
-      )
-      .then((res) => {
+    // await axios
+    //   .post(
+    //     "http://127.0.0.1:8000/user/",
+    //     { name: values.firstName,
+    //       familyname: values.familyName,
+    //       dob: values.dob,
+    //       email: values.email }
+    //   )
+    //   .then((res) => {
+    //     alert("Success");
+    //     setTimeout(() => {
+    //       window.location.reload();
+    //     }, 1000);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+    let dataStudent = new FormData();
+    dataStudent.append("name", "Test");
+    dataStudent.append("familyname", "Test");
+    dataStudent.append("dob", "Test");
+    dataStudent.append("email", "Test@gmail.com");
+    console.log(dataStudent);
+
+    // await axios({
+    //   method: 'post',
+    // url: 'http://127.0.0.1:8000/user/',
+    // data: { 'name': values.firstName,
+    //   'familyname': values.familyName,
+    //   'dob': values.dob,
+    //   'email': values.email }
+    // }).then((res) => {
+    // alert("Success");
+    // setTimeout(() => {
+    //   window.location.reload();
+    // }, 1000);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+    try {
+      const response = await fetch("http://127.0.0.1:8000/user/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(studentDetails), // Replace with your actual data
+      });
+
+      if (response.ok) {
+        // Request was successful
+        const data = await response.json();
+        console.log(data); // Do something with the response data
         alert("Success");
         setTimeout(() => {
           window.location.reload();
         }, 1000);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      } else {
+        // Request failed
+        console.error("Error:", response.status);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const validateField = (values) => {
@@ -44,6 +96,23 @@ function AddStudent() {
     }
     return error;
   };
+
+  const validateAge = (value) => {
+    let error;
+    const selectedDate = new Date(value);
+    const currentDate = new Date();
+    const minimumDate = new Date();
+    minimumDate.setFullYear(currentDate.getFullYear() - 10);
+  
+    if (!value) {
+      error = "This is a required field";
+    } else if (selectedDate >= minimumDate) {
+      error = "Age must be greater than 10 years";
+    }
+  
+    return error;
+  };
+
   return (
     <div className="flex w-[1000px] h-[700px] items-center justify-center">
       <Formik
@@ -86,7 +155,7 @@ function AddStudent() {
                   name="dob"
                   id="dob"
                   placeholder="Select DOB"
-                  validate={validateField}
+                  validate={validateAge}
                 />
                 {errors.dob && touched.dob && (
                   <p className="text-red-700">{errors.dob}</p>
