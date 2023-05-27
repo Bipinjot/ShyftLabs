@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from shyftlabs.shyftuser.models import ShyftUser
 import datetime
+from django.http import JsonResponse
 
 # Create your views here.
 @csrf_exempt
@@ -19,23 +20,30 @@ def getUser(request):
             except:
                 return HttpResponse("User not found", status=500)
         return HttpResponse(json.dumps(result), content_type = "application/json")
-    if request.method =="POST":
-        shyftuser = ShyftUser()
+    if request.method == 'POST':
         try:
-            if 'name' in request.POST:
-                shyftuser.shyft_name = request.POST['name']
-            if 'dob' in request.POST:
-                shyftuser.shyft_dob = datetime.datetime.strptime(request.POST['dob'], "%Y-%m-%d")
-            if 'email' in request.POST:
-                shyftuser.shyft_email = request.POST['email']
-            if 'familyname' in request.POST:
-                shyftuser.shyft_familyname = request.POST['familyname']
-            if 'type' in request.POST:
-                shyftuser.shyft_usertype = request.POST['type']
+            data = json.loads(request.body)
+            
+            shyftuser = ShyftUser()
+            
+            if 'name' in data:
+                shyftuser.shyft_name = data['name']
+            if 'dob' in data:
+                shyftuser.shyft_dob = datetime.datetime.strptime(data['dob'], "%Y-%m-%d")
+            if 'email' in data:
+                shyftuser.shyft_email = data['email']
+            if 'familyname' in data:
+                shyftuser.shyft_familyname = data['familyname']
+            if 'type' in data:
+                shyftuser.shyft_usertype = data['type']
+            
             shyftuser.save()
-        except:
-            return HttpResponse("Bad parameters", status=400)
-        return HttpResponse("post request, please.", content_type="text/plain")
+            
+            return JsonResponse({'message': 'User created successfully'})
+        
+        except (json.JSONDecodeError, KeyError):
+            # Return an error response if the JSON data is invalid
+            return JsonResponse({'error': 'Bad parameters'}, status=400)
 @csrf_exempt
 def getAllUser(request):
     if request.method == "GET":
@@ -53,12 +61,23 @@ def getAllUser(request):
 
 @csrf_exempt
 def deleteUser(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         try:
-            if 'userid' in request.POST:
-                retrieve = ShyftUser.objects.get(id=request.POST['userid'])
-                retrieve.isdeleted = True
-                retrieve.save()
-        except:
-            return HttpResponse("User not found", status=500)
-        return HttpResponse("User Delete action succeeded", content_type="application/json")
+            data = json.loads(request.body)
+            
+            if 'userid' in data:
+                try:
+                    retrieve = ShyftUser.objects.get(id=data['userid'])
+                    retrieve.isdeleted = True
+                    retrieve.save()
+                    return JsonResponse({'message': 'User Delete action succeeded'})
+                except ShyftUser.DoesNotExist:
+                    return JsonResponse({'error': 'User not found'}, status=404)
+            
+            return JsonResponse({'error': 'Invalid request'}, status=400)
+        
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+    
+    # Return a 405 Method Not Allowed response for non-POST requests
+    return JsonResponse({'error': 'Method Not Allowed'}, status=405)
