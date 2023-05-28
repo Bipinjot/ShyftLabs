@@ -3,35 +3,28 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from shyftlabs.shyftresults.models import ShyftResults
-from shyftlabs.shyftcourse.models import ShyftCourse
-from shyftlabs.shyftuser.models import ShyftUser
+from django.http import JsonResponse
 
 @csrf_exempt
 # Create your views here.
 def result(request):
     if request.method == "POST":
         try:
+            data = json.loads(request.body)
             result = ShyftResults()
-            if request.POST['userid']:
-                user = ShyftUser.objects.get(id=request.POST['userid'], isdeleted=False)
-                if user:
-                    result.shyftresult_user = user
-            else:
-                return HttpResponse("userid: Bad parameters", status=400)
-            if request.POST['courseid']:
-                course = ShyftCourse.objects.get(id=request.POST['courseid'], isdeleted=False)
-                if course:
-                    result.shyftresult_course = course
-            else:
-                return HttpResponse("courseid: Bad parameters", status=400)
-            if request.POST['score']:
-                result.shyftresult_score = request.POST['score']
-            else:
-                return HttpResponse("score: Bad parameters", status=400)
+            if 'username' in data:
+                result.shyft_username = data['username']
+            if 'coursename' in data:
+                result.shyft_coursename = data['coursename']
+            if 'score' in data:
+                result.shyftresult_score = data['score']
             result.save()
-        except:
-            return HttpResponse("Error in saving result", status=500)
-    return HttpResponse("Result save action succeeded", content_type="application/json")
+            
+            return JsonResponse({'message': 'Result created successfully'})
+        
+        except (json.JSONDecodeError, KeyError):
+            # Return an error response if the JSON data is invalid
+            return JsonResponse({'error': 'Bad parameters'}, status=400)
 
 @csrf_exempt
 def getAllResults(request):
@@ -46,8 +39,8 @@ def getAllResults(request):
             for retrivedResult in results:
                 singleResult = {}
                 singleResult['shyft_resultid'] = retrivedResult.id
-                singleResult['shyft_resultuser'] = retrivedResult.shyftresult_user.id
-                singleResult['shyft_resultcourse'] = retrivedResult.shyftresult_course.id
+                singleResult['shyft_resultuser'] = retrivedResult.shyft_username
+                singleResult['shyft_resultcourse'] = retrivedResult.shyft_coursename
                 singleResult['shyft_resultscore'] = retrivedResult.shyftresult_score
                 resultJson.append(singleResult)
         except:
