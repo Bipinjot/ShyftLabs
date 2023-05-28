@@ -1,6 +1,5 @@
 import React from "react";
 import { Formik, Field, Form } from "formik";
-import axios from "axios";
 
 function AddStudent(e) {
   // e.preventDefault();
@@ -30,12 +29,12 @@ function AddStudent(e) {
     //   .catch((error) => {
     //     console.log(error);
     //   });
-    let dataStudent = new FormData();
-    dataStudent.append("name", "Test");
-    dataStudent.append("familyname", "Test");
-    dataStudent.append("dob", "Test");
-    dataStudent.append("email", "Test@gmail.com");
-    console.log(dataStudent);
+    // let dataStudent = new FormData();
+    // dataStudent.append("name", "Test");
+    // dataStudent.append("familyname", "Test");
+    // dataStudent.append("dob", "Test");
+    // dataStudent.append("email", "Test@gmail.com");
+    // console.log(dataStudent);
 
     // await axios({
     //   method: 'post',
