@@ -1,7 +1,5 @@
 # ShyftLabs
 
-Welcome to ShyftLabs, a repository for [insert a brief description of your project here].
-
 ## Table of Contents
 - [Introduction](#introduction)
 - [Features](#features)
