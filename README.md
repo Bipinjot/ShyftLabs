@@ -34,6 +34,7 @@ Student Management System. The web-app has been designed with React.js in the fr
 <img width="1470" alt="image" src="https://github.com/Bipinjot/ShyftLabs/assets/25786623/d2c350d3-6ea4-4f3a-bb83-2c0358cb4e91">
 
 8. Deployment on Azure cloud
+Please use https://shyftappbackend--rev-14.ambitiousisland-adc17e0d.westus2.azurecontainerapps.io/ to access the Django backend. You can modify the API URL with this in the frontend code to access the deployed resources
 <img width="1468" alt="image" src="https://github.com/Bipinjot/ShyftLabs/assets/25786623/7cb156c1-b18f-403a-8a45-d43f4c981b32">
 <img width="1470" alt="image" src="https://github.com/Bipinjot/ShyftLabs/assets/25786623/740289a5-aecb-483b-9bfb-5b9170dea12f">
 
